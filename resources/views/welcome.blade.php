@@ -6,52 +6,55 @@
     <title>Biodata Diri - {{ $biodata['nama'] }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-100 min-h-screen flex items-center justify-center p-6">
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-teal-950 to-slate-900 text-slate-100 flex items-center justify-center p-6">
 
-    <div class="max-w-xl w-full bg-white rounded-2xl shadow-lg overflow-hidden">
-        <!-- Header / Welcome Message -->
-        <div class="bg-indigo-600 p-6 text-white text-center">
-            <p class="text-sm uppercase tracking-wider text-indigo-200 font-semibold">Public Profile</p>
-            <h1 class="text-2xl font-bold mt-1">{{ $biodata['welcome_message'] }}</h1>
-        </div>
-
-        <!-- Notifikasi Sukses setelah update dari Admin -->
+    <main class="w-full max-w-3xl">
         @if(session('success'))
-            <div class="bg-emerald-100 border-l-4 border-emerald-500 text-emerald-700 p-4 text-sm">
+            <div class="mb-6 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-5 py-4 text-sm text-emerald-200 shadow-lg shadow-emerald-950/20">
                 {{ session('success') }}
             </div>
         @endif
 
-        <!-- Konten Biodata -->
-        <div class="p-6 space-y-4">
-            <div>
-                <span class="text-xs text-slate-400 uppercase font-bold">Nama Lengkap</span>
-                <p class="text-lg font-semibold text-slate-800">{{ $biodata['nama'] }}</p>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <span class="text-xs text-slate-400 uppercase font-bold">Profesi / Status</span>
-                    <p class="text-slate-700">{{ $biodata['profesi'] }}</p>
+        <section class="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl shadow-black/30 backdrop-blur">
+            <div class="relative border-b border-white/10 px-8 py-10">
+                <div class="absolute inset-0 bg-gradient-to-r from-teal-500/20 via-cyan-500/10 to-transparent"></div>
+                <div class="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-5">
+                        <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 text-2xl font-bold text-slate-950 shadow-lg shadow-teal-900/40">
+                            {{ collect(explode(' ', trim($biodata['nama'])))->filter()->take(2)->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))->implode('') ?: 'P' }}
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-teal-300/80">Profil Biodata</p>
+                            <h1 class="mt-2 text-3xl font-bold tracking-tight text-white">{{ $biodata['nama'] }}</h1>
+                            <p class="mt-1 text-sm text-slate-300">{{ $biodata['profesi'] }}</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('admin.index') }}" class="inline-flex items-center justify-center rounded-xl border border-teal-300/30 bg-teal-400/10 px-4 py-2.5 text-sm font-semibold text-teal-100 transition hover:bg-teal-400/20">
+                        Kelola Konten
+                    </a>
                 </div>
-                <div>
-                    <span class="text-xs text-slate-400 uppercase font-bold">Domisili</span>
-                    <p class="text-slate-700">{{ $biodata['alamat'] }}</p>
-                </div>
+                <p class="relative mt-8 max-w-2xl text-lg leading-relaxed text-slate-200">
+                    {{ $biodata['welcome_message'] }}
+                </p>
             </div>
-            <div>
-                <span class="text-xs text-slate-400 uppercase font-bold">Tentang Saya</span>
-                <p class="text-slate-600 leading-relaxed mt-1">{{ $biodata['tentang'] }}</p>
-            </div>
-        </div>
 
-        <!-- Navigasi ke Route Management / Admin -->
-        <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-between items-center">
-            <span class="text-xs text-slate-400">Root Path: <code>/</code></span>
-            <a href="{{ route('admin.index') }}" class="text-sm bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg transition">
-                Kelola Konten (Admin) &rarr;
-            </a>
-        </div>
-    </div>
+            <div class="grid gap-6 px-8 py-8 sm:grid-cols-3">
+                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-5 sm:col-span-1">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Domisili</p>
+                    <p class="mt-3 text-base font-medium text-white">{{ $biodata['alamat'] }}</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-slate-950/40 p-5 sm:col-span-2">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Tentang Saya</p>
+                    <p class="mt-3 leading-relaxed text-slate-200">{{ $biodata['tentang'] }}</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 border-t border-white/10 bg-black/20 px-8 py-5 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+                <span>Halaman publik biodata pribadi</span>
+                <span class="font-mono text-xs text-slate-500">Route: /</span>
+            </div>
+        </section>
+    </main>
 
 </body>
 </html>
